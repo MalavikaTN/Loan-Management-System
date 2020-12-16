@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClientManager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DOB" Type="datetime" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="bigint" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Loan">
+          <Key>
+            <PropertyRef Name="LoanAccountNo" />
+          </Key>
+          <Property Name="LoanAccountNo" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanId" Type="int" Nullable="false" />
+          <Property Name="AccountNo" Type="bigint" Nullable="false" />
+          <Property Name="Occupation" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CurrentAddress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AnnualIncome" Type="int" Nullable="false" />
+          <Property Name="LoanAmount" Type="int" Nullable="false" />
+          <Property Name="Duration" Type="tinyint" Nullable="false" />
+          <Property Name="EMI" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LoanStatus" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalDate" Type="date" />
+          <Property Name="DateOfRequest" Type="date" />
+          <Property Name="InterviewDate" Type="date" />
+        </EntityType>
+        <EntityType Name="LoanProgram">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Interest" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PayLoan">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanAccountNo" Type="bigint" />
+          <Property Name="PayingAmount" Type="int" />
+          <Property Name="PaymentDate" Type="date" />
+          <Property Name="Balance" Type="int" />
+          <Property Name="Fine" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="AccountNo" />
+          </Key>
+          <Property Name="AccountNo" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PAN" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PermanentAddress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="bigint" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Aadhaar" Type="bigint" />
+        </EntityType>
+        <Association Name="FK__Loan__AccountNo__160F4887">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="AccountNo" />
+            </Principal>
+            <Dependent Role="Loan">
+              <PropertyRef Name="AccountNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Loan__LoanId__17036CC0">
+          <End Role="LoanProgram" Type="Self.LoanProgram" Multiplicity="1" />
+          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanProgram">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Loan">
+              <PropertyRef Name="LoanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PayLoan_Loan">
+          <End Role="Loan" Type="Self.Loan" Multiplicity="0..1" />
+          <End Role="PayLoan" Type="Self.PayLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loan">
+              <PropertyRef Name="LoanAccountNo" />
+            </Principal>
+            <Dependent Role="PayLoan">
+              <PropertyRef Name="LoanAccountNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LMSModelStoreContainer">
+          <EntitySet Name="ClientManager" EntityType="Self.ClientManager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanProgram" EntityType="Self.LoanProgram" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoan" EntityType="Self.PayLoan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Loan__AccountNo__160F4887" Association="Self.FK__Loan__AccountNo__160F4887">
+            <End Role="User" EntitySet="User" />
+            <End Role="Loan" EntitySet="Loan" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Loan__LoanId__17036CC0" Association="Self.FK__Loan__LoanId__17036CC0">
+            <End Role="LoanProgram" EntitySet="LoanProgram" />
+            <End Role="Loan" EntitySet="Loan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PayLoan_Loan" Association="Self.FK_PayLoan_Loan">
+            <End Role="Loan" EntitySet="Loan" />
+            <End Role="PayLoan" EntitySet="PayLoan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClientManager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DOB" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="Int64" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Loan">
+          <Key>
+            <PropertyRef Name="LoanAccountNo" />
+          </Key>
+          <Property Name="LoanAccountNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanId" Type="Int32" Nullable="false" />
+          <Property Name="AccountNo" Type="Int64" Nullable="false" />
+          <Property Name="Occupation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CurrentAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AnnualIncome" Type="Int32" Nullable="false" />
+          <Property Name="LoanAmount" Type="Int32" Nullable="false" />
+          <Property Name="Duration" Type="Byte" Nullable="false" />
+          <Property Name="EMI" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LoanStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateOfRequest" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="PayLoans" Relationship="Self.FK_PayLoan_Loan" FromRole="Loan" ToRole="PayLoan" />
+          <NavigationProperty Name="User" Relationship="LMSModel.FK__Loan__AccountNo__03F0984C" FromRole="Loan" ToRole="User" />
+          <NavigationProperty Name="LoanProgram" Relationship="LMSModel.FK__Loan__LoanId__04E4BC85" FromRole="Loan" ToRole="LoanProgram" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="0" />
+          <Property Name="InterviewDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="LoanProgram">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Interest" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Loans" Relationship="LMSModel.FK__Loan__LoanId__04E4BC85" FromRole="LoanProgram" ToRole="Loan" />
+        </EntityType>
+        <EntityType Name="PayLoan">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanAccountNo" Type="Int64" />
+          <Property Name="PayingAmount" Type="Int32" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="Balance" Type="Int32" />
+          <Property Name="Fine" Type="Int32" />
+          <NavigationProperty Name="Loan" Relationship="Self.FK_PayLoan_Loan" FromRole="PayLoan" ToRole="Loan" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="AccountNo" />
+          </Key>
+          <Property Name="AccountNo" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PAN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PermanentAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="Int64" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Aadhaar" Type="Int64" />
+          <NavigationProperty Name="Loans" Relationship="LMSModel.FK__Loan__AccountNo__03F0984C" FromRole="User" ToRole="Loan" />
+        </EntityType>
+        <Association Name="FK_PayLoan_Loan">
+          <End Role="Loan" Type="Self.Loan" Multiplicity="0..1" />
+          <End Role="PayLoan" Type="Self.PayLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loan">
+              <PropertyRef Name="LoanAccountNo" />
+            </Principal>
+            <Dependent Role="PayLoan">
+              <PropertyRef Name="LoanAccountNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LMSEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClientManagers" EntityType="Self.ClientManager" />
+          <EntitySet Name="Loans" EntityType="Self.Loan" />
+          <EntitySet Name="LoanPrograms" EntityType="Self.LoanProgram" />
+          <EntitySet Name="PayLoans" EntityType="Self.PayLoan" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_PayLoan_Loan" Association="Self.FK_PayLoan_Loan">
+            <End Role="Loan" EntitySet="Loans" />
+            <End Role="PayLoan" EntitySet="PayLoans" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Loan__AccountNo__03F0984C" Association="LMSModel.FK__Loan__AccountNo__03F0984C">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Loan" EntitySet="Loans" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Loan__LoanId__04E4BC85" Association="LMSModel.FK__Loan__LoanId__04E4BC85">
+            <End Role="LoanProgram" EntitySet="LoanPrograms" />
+            <End Role="Loan" EntitySet="Loans" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK__Loan__AccountNo__03F0984C">
+          <End Type="LMSModel.User" Role="User" Multiplicity="1" />
+          <End Type="LMSModel.Loan" Role="Loan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="AccountNo" />
+            </Principal>
+            <Dependent Role="Loan">
+              <PropertyRef Name="AccountNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Loan__LoanId__04E4BC85">
+          <End Type="LMSModel.LoanProgram" Role="LoanProgram" Multiplicity="1" />
+          <End Type="LMSModel.Loan" Role="Loan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanProgram">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Loan">
+              <PropertyRef Name="LoanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LMSModelStoreContainer" CdmEntityContainer="LMSEntities1">
+          <EntitySetMapping Name="ClientManagers">
+            <EntityTypeMapping TypeName="LMSModel.ClientManager">
+              <MappingFragment StoreEntitySet="ClientManager">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Loans">
+            <EntityTypeMapping TypeName="LMSModel.Loan">
+              <MappingFragment StoreEntitySet="Loan">
+                <ScalarProperty Name="InterviewDate" ColumnName="InterviewDate" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="LoanAccountNo" ColumnName="LoanAccountNo" />
+                <ScalarProperty Name="LoanId" ColumnName="LoanId" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="Occupation" ColumnName="Occupation" />
+                <ScalarProperty Name="CurrentAddress" ColumnName="CurrentAddress" />
+                <ScalarProperty Name="AnnualIncome" ColumnName="AnnualIncome" />
+                <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="EMI" ColumnName="EMI" />
+                <ScalarProperty Name="LoanStatus" ColumnName="LoanStatus" />
+                <ScalarProperty Name="DateOfRequest" ColumnName="DateOfRequest" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanPrograms">
+            <EntityTypeMapping TypeName="LMSModel.LoanProgram">
+              <MappingFragment StoreEntitySet="LoanProgram">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LoanType" ColumnName="LoanType" />
+                <ScalarProperty Name="Interest" ColumnName="Interest" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoans">
+            <EntityTypeMapping TypeName="LMSModel.PayLoan">
+              <MappingFragment StoreEntitySet="PayLoan">
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="LoanAccountNo" ColumnName="LoanAccountNo" />
+                <ScalarProperty Name="PayingAmount" ColumnName="PayingAmount" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Fine" ColumnName="Fine" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="LMSModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PAN" ColumnName="PAN" />
+                <ScalarProperty Name="PermanentAddress" ColumnName="PermanentAddress" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Aadhaar" ColumnName="Aadhaar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,54 @@
+.nav-link{
+    width: 220px;
+    outline: none;
+    margin-right: -1px;
+    margin-left: -1px;
+}
+.nav-tabs{
+    width: 1200px;
+}
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+    outline:0;
+  }
+.card{
+    width: 100%;
+    height: 180px;
+}
+.mycard{
+    height: 300px;
+}
+.mycard2{
+    height: 380px;
+}
+form{
+    margin: 15px;
+}
+.form-row{
+    padding: 10px;
+}
+.Llogo{
+    width: 200px;
+    height: 40px;
+  }
+
+  .cardLP{
+      height: 250px;
+  }
+
+  .bLink{
+      height: 30px;
+      font-size: 16px;
+      color: black;
+      margin-right: 2px;
+      background-color: rgb(236, 236, 181);
+  }
+  .bbtn{
+    height: 30px;
+    font-size: 16px;
+    margin-left: 3px;
+    background-color: rgb(240, 158, 158);
+    
+  }
+  .navA>a{
+      font-size: medium;
+  }

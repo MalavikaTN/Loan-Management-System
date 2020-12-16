@@ -1,0 +1,21 @@
+.hidetext{
+    -webkit-text-security:disc;
+}
+.reqCard{
+    width: 100%;
+    height: 500px;
+  
+}
+.Llogo{
+    width: 200px;
+    height: 40px;
+  }
+  .nav-link{
+    width: 200px;
+}
+.nav-tabs{
+    width: 1200px;
+}
+.ivCard{
+height: 500px;
+}

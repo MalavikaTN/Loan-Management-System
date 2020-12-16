@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ClientManager">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DOB" Type="datetime" />
+    <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phone" Type="bigint" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Loan">
+    <Key>
+      <PropertyRef Name="LoanAccountNo" />
+    </Key>
+    <Property Name="LoanAccountNo" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoanId" Type="int" Nullable="false" />
+    <Property Name="AccountNo" Type="bigint" Nullable="false" />
+    <Property Name="Occupation" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CurrentAddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AnnualIncome" Type="int" Nullable="false" />
+    <Property Name="LoanAmount" Type="int" Nullable="false" />
+    <Property Name="Duration" Type="tinyint" Nullable="false" />
+    <Property Name="EMI" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="LoanStatus" Type="varchar" MaxLength="50" />
+    <Property Name="ApprovalDate" Type="date" />
+    <Property Name="DateOfRequest" Type="date" />
+    <Property Name="InterviewDate" Type="date" />
+  </EntityType>
+  <EntityType Name="LoanProgram">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoanType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Interest" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="PayLoan">
+    <Key>
+      <PropertyRef Name="PaymentId" />
+    </Key>
+    <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoanAccountNo" Type="bigint" />
+    <Property Name="PayingAmount" Type="int" />
+    <Property Name="PaymentDate" Type="date" />
+    <Property Name="Balance" Type="int" />
+    <Property Name="Fine" Type="int" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="AccountNo" />
+    </Key>
+    <Property Name="AccountNo" Type="bigint" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="Gender" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PAN" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PermanentAddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phone" Type="bigint" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Aadhaar" Type="bigint" />
+  </EntityType>
+  <Association Name="FK__Loan__AccountNo__160F4887">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="AccountNo" />
+      </Principal>
+      <Dependent Role="Loan">
+        <PropertyRef Name="AccountNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Loan__LoanId__17036CC0">
+    <End Role="LoanProgram" Type="Self.LoanProgram" Multiplicity="1" />
+    <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoanProgram">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Loan">
+        <PropertyRef Name="LoanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PayLoan_Loan">
+    <End Role="Loan" Type="Self.Loan" Multiplicity="0..1" />
+    <End Role="PayLoan" Type="Self.PayLoan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Loan">
+        <PropertyRef Name="LoanAccountNo" />
+      </Principal>
+      <Dependent Role="PayLoan">
+        <PropertyRef Name="LoanAccountNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LMSModelStoreContainer">
+    <EntitySet Name="ClientManager" EntityType="Self.ClientManager" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoanProgram" EntityType="Self.LoanProgram" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PayLoan" EntityType="Self.PayLoan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Loan__AccountNo__160F4887" Association="Self.FK__Loan__AccountNo__160F4887">
+      <End Role="User" EntitySet="User" />
+      <End Role="Loan" EntitySet="Loan" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Loan__LoanId__17036CC0" Association="Self.FK__Loan__LoanId__17036CC0">
+      <End Role="LoanProgram" EntitySet="LoanProgram" />
+      <End Role="Loan" EntitySet="Loan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PayLoan_Loan" Association="Self.FK_PayLoan_Loan">
+      <End Role="Loan" EntitySet="Loan" />
+      <End Role="PayLoan" EntitySet="PayLoan" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
